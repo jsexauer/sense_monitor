@@ -1,7 +1,7 @@
 import datetime
 from flask import Flask
 from threading import Thread
-from .shared_data import SHARED_DATA
+from sense_monitor.shared_data import SHARED_DATA
 
 server = Flask(__name__)
 @server.route("/")
@@ -21,7 +21,7 @@ def hello():
 
 
 if __name__ == "__main__":
-    from .poll_worker import thread_worker
+    from sense_monitor.poll_worker import thread_worker
     t = Thread(target=thread_worker)
     t.start()
     server.run(host='0.0.0.0', port=5005)
