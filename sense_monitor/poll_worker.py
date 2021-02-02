@@ -28,6 +28,9 @@ def poll_sense_data():
     phone_present = False
     for d in devices:
         print(d.addr, d.rssi)
+        if d.addr == '73:4a:76:d9:5f:7f':
+            phone_present = True
+    print('*'*20)
 
     ppt = SHARED_DATA.history[-1].phone_present_time
     if phone_present != SHARED_DATA.history[-1].phone_present:
