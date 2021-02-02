@@ -6,8 +6,8 @@ import pytz
 
 
 from bluepy.btle import Scanner
-from .sense_api import SenseApi
-from .shared_data import PolledData, SHARED_DATA
+from sense_monitor.sense_api import SenseApi
+from sense_monitor.shared_data import PolledData, SHARED_DATA
 
 EPT = pytz.timezone('US/Eastern')
 

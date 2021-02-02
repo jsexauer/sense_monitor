@@ -16,4 +16,12 @@ class _SharedData:
         self.history: Deque[PolledData] = deque(maxlen=10)
         self.last_error = ''
 
+        self.history.append(PolledData(
+            timestamp=datetime.datetime.now(),
+            heater_state='???',
+            heater_state_time=datetime.datetime(2000,1,1),
+            phone_present=False,
+            phone_present_time=datetime.datetime(2000,1,1)
+        ))
+
 SHARED_DATA = _SharedData()
