@@ -3,7 +3,7 @@ Sense monitor on raspberry pi
 
 # Install
 ```
-sudo apt-get install libglib2.0-dev
+sudo apt-get install libbluetooth-dev python-dev libglib2.0-dev libboost-python-dev libboost-thread-dev
 
 # Give Bluetooth access to pybleno --> Python3.7 
 sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/bin/python3.7
