@@ -55,7 +55,8 @@ def poll_sense_data():
     #  once an hour
     if (datetime.datetime.now() - SHARED_DATA.last_notify > datetime.timedelta(hours=1) and
               all([d.heater_state == 'On' for d in SHARED_DATA.history]) and
-              all([not d.phone_present for d in SHARED_DATA.history])):
+              all([d.phone_present == False for d in SHARED_DATA.history])):
+        print(f"*** SENDING NOTICE TEXT at {datetime.datetime.now()} ***")
         send_email(
             send_to=PHONE_EMAIL_ADDR,
             subject="Heater left on",
@@ -71,6 +72,4 @@ def thread_worker():
             poll_sense_data()
         except Exception as ex:
             SHARED_DATA.last_error = f"At {datetime.datetime.now()}:\n" + format_exc()
-        else:
-            SHARED_DATA.last_error = ''
         time.sleep(60)

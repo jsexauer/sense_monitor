@@ -6,6 +6,28 @@ from dataclasses import dataclass
 
 EPT = pytz.timezone('US/Eastern')
 
+
+def td_format(td_object):
+    seconds = int(td_object.total_seconds())
+    periods = [
+        ('year',        60*60*24*365),
+        ('month',       60*60*24*30),
+        ('day',         60*60*24),
+        ('hr',        60*60),
+        ('min',      60),
+        ('sec',      1)
+    ]
+
+    strings=[]
+    for period_name, period_seconds in periods:
+        if seconds > period_seconds:
+            period_value , seconds = divmod(seconds, period_seconds)
+            has_s = 's' if period_value > 1 else ''
+            strings.append("%s %s%s" % (period_value, period_name, has_s))
+
+    return ", ".join(strings)
+
+
 @dataclass
 class PolledData:
     timestamp: datetime.datetime
@@ -20,10 +42,10 @@ class PolledData:
         x = self
         return f"""
             <p>Heater: {x.heater_state}</p>
-            <p>Heater last state change: {EPT.localize(datetime.datetime.now()) - x.heater_state_time} at {x.heater_state_time}</p>
-            <p>Phone present: {x.phone_present} at {x.phone_rssi}</p>
-            <p>Phone last state chagne: {datetime.datetime.now() - x.phone_present_time} at {x.phone_present_time}</p>
-            <p>Updated: {x.timestamp}</p>
+            <p>Heater changed: {td_format(EPT.localize(datetime.datetime.now()) - x.heater_state_time)} ago at {x.heater_state_time: %H:%M}</p>
+            <p>Phone present: {x.phone_present} at {x.phone_rssi} dB</p>
+            <p>Phone changed: {td_format(datetime.datetime.now() - x.phone_present_time)} ago at {x.phone_present_time: %H:%M}</p>
+            <p>Recorded at: {td_format(datetime.datetime.now() - x.timestamp)} ago at {x.timestamp:: %H:%M}</p>
             """
 
 class _SharedData:

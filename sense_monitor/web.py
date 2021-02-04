@@ -24,7 +24,7 @@ def hello():
     <tr>
     """
 
-    for x in reversed(SHARED_DATA):
+    for x in reversed(SHARED_DATA.history):
         html += f"<td>{x.html}</td>"
 
     html += "</tr></table>"

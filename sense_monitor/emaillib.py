@@ -8,7 +8,10 @@ GMAIL_USERNAME = 'genericcarbonlifeform@gmail.com'  # change this to match your 
 
 
 def send_email(send_to, subject, body):
-    msg = "Subject: " + subject + "\n\n" + body
+    headers = ["From: " + GMAIL_USERNAME, "Subject: " + subject, "To: " + send_to,
+               "MIME-Version: 1.0", 'Content-Type: text/plain; charset="UTF-8"']
+    headers = "\r\n".join(headers)
+    msg = headers + "\r\n\r\n" + body
 
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as session:
         session.ehlo()
@@ -17,25 +20,6 @@ def send_email(send_to, subject, body):
 
         session.login(GMAIL_USERNAME, GMAIL_PASSWORD)
         session.sendmail(GMAIL_USERNAME, send_to, msg)
-
-def send_email_OLD(send_to, subject, body):
-    # Create Headers
-    headers = ["From: " + GMAIL_USERNAME, "Subject: " + subject, "To: " + send_to,
-               "MIME-Version: 1.0", "Content-Type: text/html"]
-    headers = "\r\n".join(headers)
-
-    # Connect to Gmail Server
-    session = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    session.ehlo()
-    session.starttls()
-    session.ehlo()
-
-    # Login to Gmail
-    session.login(GMAIL_USERNAME, GMAIL_PASSWORD)
-
-    # Send Email & Exit
-    session.sendmail(GMAIL_USERNAME, send_to, headers + "\r\n\r\n" + body)
-    session.quit()
 
 if __name__ == '__main__':
     send_email(
