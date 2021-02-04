@@ -21,7 +21,7 @@ class PolledData:
         return f"""
             <p>Heater: {x.heater_state}</p>
             <p>Heater last state change: {EPT.localize(datetime.datetime.now()) - x.heater_state_time} at {x.heater_state_time}</p>
-            <p>Phone present: {x.phone_present}</p>
+            <p>Phone present: {x.phone_present} at {x.phone_rssi}</p>
             <p>Phone last state chagne: {datetime.datetime.now() - x.phone_present_time} at {x.phone_present_time}</p>
             <p>Updated: {x.timestamp}</p>
             """
@@ -30,6 +30,7 @@ class _SharedData:
     def __init__(self):
         self.history: Deque[PolledData] = deque(maxlen=5)
         self.last_error = ''
+        self.last_notify = datetime.datetime(2000, 1, 1)
 
         self.history.append(PolledData(
             timestamp=datetime.datetime.now(),

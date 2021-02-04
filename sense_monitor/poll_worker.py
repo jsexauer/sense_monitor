@@ -9,6 +9,7 @@ from bluepy.btle import Scanner, DefaultDelegate
 from sense_monitor.sense_api import SenseApi
 from sense_monitor.shared_data import PolledData, SHARED_DATA
 from sense_monitor.emaillib import send_email
+from sense_monitor.secret import PHONE_EMAIL_ADDR
 
 EPT = pytz.timezone('US/Eastern')
 
@@ -50,6 +51,18 @@ def poll_sense_data():
 
     SHARED_DATA.history.append(data)
 
+    # See if we should send a warning email.  Heater has been on, but phone has not been present.  Only notify
+    #  once an hour
+    if (datetime.datetime.now() - SHARED_DATA.last_notify > datetime.timedelta(hours=1) and
+              all([d.heater_state == 'On' for d in SHARED_DATA.history]) and
+              all([not d.phone_present for d in SHARED_DATA.history])):
+        send_email(
+            send_to=PHONE_EMAIL_ADDR,
+            subject="Heater left on",
+            body="http://rpi:5005"
+        )
+        SHARED_DATA.last_notify = datetime.datetime.now()
+
 
 
 def thread_worker():
@@ -57,7 +70,7 @@ def thread_worker():
         try:
             poll_sense_data()
         except Exception as ex:
-            SHARED_DATA.last_error = f"At datetime.datetime.now():\n" + format_exc()
+            SHARED_DATA.last_error = f"At {datetime.datetime.now()}:\n" + format_exc()
         else:
             SHARED_DATA.last_error = ''
-        time.sleep(6)
+        time.sleep(60)
