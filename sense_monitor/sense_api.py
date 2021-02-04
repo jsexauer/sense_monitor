@@ -3,6 +3,8 @@ from pprint import pprint
 import pytz
 import datetime
 
+from sense_monitor.secret import SENSE_PASSWORD
+
 API_URL = 'https://api.sense.com/apiservice/api/v1/'
 
 
@@ -22,7 +24,7 @@ class SenseApi(object):
     def authenticate(self):
         auth_data = {
             "email": "GenericCarbonLifeform@gmail.com",
-            "password": open("pw.txt").read().strip()
+            "password": SENSE_PASSWORD
         }
 
         # Create session

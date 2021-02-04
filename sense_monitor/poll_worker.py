@@ -8,10 +8,9 @@ import pytz
 from bluepy.btle import Scanner, DefaultDelegate
 from sense_monitor.sense_api import SenseApi
 from sense_monitor.shared_data import PolledData, SHARED_DATA
+from sense_monitor.emaillib import send_email
 
 EPT = pytz.timezone('US/Eastern')
-
-
 
 def poll_sense_data():
 
@@ -39,13 +38,14 @@ def poll_sense_data():
         ppt = datetime.datetime.now()
 
 
-
+    # Update shared data
     data = PolledData(
         timestamp=datetime.datetime.now(),
         heater_state=heater['device']['last_state'],
         heater_state_time=pytz.utc.localize(heater_ts).astimezone(EPT),
         phone_present=phone_present,
-        phone_present_time=ppt
+        phone_present_time=ppt,
+        phone_rssi=phone_rssi
     )
 
     SHARED_DATA.history.append(data)

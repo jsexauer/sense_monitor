@@ -132,3 +132,4 @@ dmypy.json
 /sense_monitor/pw.txt
 pw.txt
 
+/sense_monitor/secret.py

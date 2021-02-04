@@ -12,17 +12,24 @@ server = Flask(__name__)
 @server.route("/")
 def hello():
     x = SHARED_DATA.history[-1]
-    return f"""
+    html = f"""
     <h3>Current Status</h3>
-    <p>Heater: {x.heater_state}</p>
-    <p>Heater last state change: {EPT.localize(datetime.datetime.now()) - x.heater_state_time} at {x.heater_state_time}</p>
-    <p>Phone present: {x.phone_present}</p>
-    <p>Phone last state chagne: {datetime.datetime.now() - x.phone_present_time} at {x.phone_present_time}</p>
-    <p>Updated: {x.timestamp}</p>
+    {x.html}
 
     <h3>Errors:</h3>
     <pre>{SHARED_DATA.last_error}</pre>
+
+    <h3>Last 5 minutes:</h3>
+    <table border=0 >
+    <tr>
     """
+
+    for x in reversed(SHARED_DATA):
+        html += f"<td>{x.html}</td>"
+
+    html += "</tr></table>"
+
+    return html
 
 
 def run_webserver():
