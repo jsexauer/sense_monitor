@@ -5,7 +5,7 @@ from traceback import format_exc
 import pytz
 
 
-from bluepy.btle import Scanner
+from bluepy.btle import Scanner, DefaultDelegate
 from sense_monitor.sense_api import SenseApi
 from sense_monitor.shared_data import PolledData, SHARED_DATA
 
@@ -23,13 +23,15 @@ def poll_sense_data():
 
     # Pull bluetooth data
     scanner = Scanner()
-    devices = scanner.scan(3)
+    devices = scanner.scan(5.0)
 
     phone_present = False
+    phone_rssi = 0
     for d in devices:
         print(d.addr, d.rssi)
-        if d.addr == '73:4a:76:d9:5f:7f':
+        if d.addr == '18:4e:16:94:38:af':
             phone_present = True
+            phone_rssi = d.rssi
     print('*'*20)
 
     ppt = SHARED_DATA.history[-1].phone_present_time
@@ -58,4 +60,4 @@ def thread_worker():
             SHARED_DATA.last_error = f"At datetime.datetime.now():\n" + format_exc()
         else:
             SHARED_DATA.last_error = ''
-        time.sleep(60)
+        time.sleep(6)
