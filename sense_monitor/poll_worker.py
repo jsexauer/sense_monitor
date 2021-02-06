@@ -14,6 +14,8 @@ from sense_monitor.secret import PHONE_EMAIL_ADDR
 EPT = pytz.timezone('US/Eastern')
 
 def poll_sense_data():
+    print('*'*40)
+    print(datetime.datetime.now())
 
     # Pull sense data
     sense = SenseApi()
@@ -32,7 +34,7 @@ def poll_sense_data():
         if d.addr == '18:4e:16:94:38:af':
             phone_present = True
             phone_rssi = d.rssi
-    print('*'*20)
+    
 
     ppt = SHARED_DATA.history[-1].phone_present_time
     if phone_present != SHARED_DATA.history[-1].phone_present:
@@ -53,6 +55,9 @@ def poll_sense_data():
 
     # See if we should send a warning email.  Heater has been on, but phone has not been present.  Only notify
     #  once an hour
+    print(datetime.datetime.now() - SHARED_DATA.last_notify > datetime.timedelta(hours=1),
+          all([d.heater_state == 'On' for d in SHARED_DATA.history]),
+          all([d.phone_present == False for d in SHARED_DATA.history]))
     if (datetime.datetime.now() - SHARED_DATA.last_notify > datetime.timedelta(hours=1) and
               all([d.heater_state == 'On' for d in SHARED_DATA.history]) and
               all([d.phone_present == False for d in SHARED_DATA.history])):
