@@ -9,6 +9,6 @@ while True:
     print(f"{datetime.datetime.now()} - device exists!")
   else:
     print(f"{datetime.datetime.now()} - device out of range!")
-    time.sleep(30)
+  time.sleep(30)
 
 
