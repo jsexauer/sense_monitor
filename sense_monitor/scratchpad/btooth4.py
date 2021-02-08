@@ -1,4 +1,4 @@
-# This one works!
+# This one works!  It is using Bluetooth Low energy
 # Phone = 18:4e:16:94:38:af but will have randomly changing address from covid service
 
 

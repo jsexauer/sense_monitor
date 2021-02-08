@@ -133,3 +133,4 @@ dmypy.json
 pw.txt
 
 /sense_monitor/secret.py
+.idea
