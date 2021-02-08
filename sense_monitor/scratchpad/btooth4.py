@@ -44,5 +44,5 @@ def scan_for_phone():
         sleep(15)
         
 if __name__=='__main__':
-    print_devices()
-    #scan_for_phone()
+    #print_devices()
+    scan_for_phone()
