@@ -19,8 +19,16 @@ sudo setcap 'cap_net_raw,cap_net_admin+eip' /home/pi/.local/lib/python3.7/site-p
 ```
 
 # Bluetooth info
-Turns out these change frequently, so this is worhtless...
-73:4a:76:d9:5f:7f = Personal cell phone
-55:1c:01:b9:f8:9a = ???
-47:27:d4:12:9a:76 = Swidget Power insert
-4a:9a:1c:85:63:00 = Work iPhone
+18:4E:16:94:38:AF = Samsung S20 FE
+
+Pair using UI or
+```
+bluetoothctl
+scan on
+# Put phone into pariring mode
+# Now you should see the id
+info 18:4E:16:94:38:AF
+pair 18:4E:16:94:38:AF
+connect 18:4E:16:94:38:AF
+```
+
