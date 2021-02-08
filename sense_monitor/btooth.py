@@ -59,7 +59,7 @@ class BluetoothMonitor:
             time.sleep(0.5)
 
         self.print(rssis)
-        rssis_less_nones = filter(lambda x: x is not None, rssis)
+        rssis_less_nones = list(filter(lambda x: x is not None, rssis))
         if len(rssis_less_nones) == 0:
             return None # device was out of range for all measurements
 
