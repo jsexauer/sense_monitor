@@ -2,6 +2,8 @@
 Sense monitor on raspberry pi
 
 # Install
+
+Below only needed when playing with bluetooth low energy (BLE)
 ```
 # From https://github.com/pybluez/pybluez/wiki/Installation-on-Raspberry-Pi-3
 sudo apt-get install libbluetooth-dev python-dev libglib2.0-dev libboost-python-dev libboost-thread-dev
