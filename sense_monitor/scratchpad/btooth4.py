@@ -1,5 +1,7 @@
 # This one works!
-# Phone = 18:4e:16:94:38:af
+# Phone = 18:4e:16:94:38:af but will have randomly changing address from covid service
+
+
 import datetime
 from bluepy.btle import Scanner, DefaultDelegate
 from time import sleep
