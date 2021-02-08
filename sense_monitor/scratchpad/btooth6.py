@@ -5,7 +5,7 @@ import array
 import fcntl
 from time import sleep
 
-bluetooth.lookup_name("18:4E:16:94:38:AF")
+print(bluetooth.lookup_name("18:4E:16:94:38:AF"))
 
 
 class BluetoothRSSI(object):
@@ -50,7 +50,9 @@ class BluetoothRSSI(object):
             rssi = bt.hci_send_req(
                 self.hci_sock, bt.OGF_STATUS_PARAM,
                 bt.OCF_READ_RSSI, bt.EVT_CMD_COMPLETE, 4, self.cmd_pkt)
-            rssi = struct.unpack('b', bytes(rssi)[3])[0]
+            print(struct.unpack('bbbb', rssi))
+            #rssi = struct.unpack('b', rssi[3])[0]
+            rssi = struct.unpack('bbbb', rssi)[3]
             return rssi
         except IOError:
             # Happens if connection fails (e.g. device is not in range)
