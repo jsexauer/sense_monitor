@@ -37,7 +37,8 @@ def scan_for_phone():
             dev_desc = "Device %s (%s), RSSI=%d dB\n" % (dev.addr, dev.addrType, dev.rssi)
             for (adtype, desc, value) in dev.getScanData():
                 dev_desc += "  %s = %s [%s]\n" % (desc, value, adtype)
-                if value in ('0000fd6f-0000-1000-8000-00805f9b34fb'):
+                if value == '0000fd6f-0000-1000-8000-00805f9b34fb':
+                    print("found")
                     found_services = True                    
             if found_services:
                 print(dev_desc)
