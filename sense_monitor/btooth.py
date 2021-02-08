@@ -10,16 +10,20 @@ from bluepy.btle import Scanner
 
 
 class BluetoothMonitor:
-    def __init__(self, addr):
+    def __init__(self, addr, debug=False):
         self.addr = addr
+        self.debug = debug
 
+    def print(self, *args):
+        if self.debug:
+            print(*args)
 
     def old_methodology(self):
         scanner = Scanner()
         devices = scanner.scan(5.0)
 
         for d in devices:
-            #print(d.addr, d.rssi)
+            self.print(d.addr, d.rssi)
             if d.addr.lower() == self.addr.lower():
                 return d.rssi
         return None
@@ -32,27 +36,29 @@ class BluetoothMonitor:
         devices = scanner.scan(2.0)
 
         for dev in devices:
-            found_services = False
+            found_covid = False
             dev_desc = "Device %s (%s), RSSI=%d dB\n" % (dev.addr, dev.addrType, dev.rssi)
             for (adtype, desc, value) in dev.getScanData():
                 dev_desc += "  %s = %s [%s]\n" % (desc, value, adtype)
                 if value == '0000fd6f-0000-1000-8000-00805f9b34fb': # COVID service ID
-                    print("found")
-                    found_services = True
-            if found_services:
+                    self.print("found")
+                    found_covid = True
+            if found_covid:
+                self.print(dev_desc)
                 return dev.rssi
-                #print(dev_desc)
+
         return None
 
     def standard_methodology(self):
         # Tries to connect to the device using normal bluetooth (not low energy)
-        # rssi is very unstable, so pull it 5 times and take the average of the non-zero ones
+        # rssi is very unstable, so pull it 10 times and take the average of the non-zero ones
         btrssi = BluetoothRSSI(self.addr.upper())
         rssis = []
         for i in range(10):
             rssis.append(btrssi.get_rssi())
             time.sleep(0.5)
 
+        self.print(rssis)
         rssis_less_nones = filter(lambda x: x is not None, rssis)
         if rssis_less_nones == len(rssis):
             return None # device was out of range for all measurements
@@ -62,7 +68,6 @@ class BluetoothMonitor:
             return -1 # Device is close, but can't find an exact rssi
 
         return round(sum(rssis_filtered) / len(rssis_filtered), 1)
-
 
 
 class BluetoothRSSI(object):
@@ -115,8 +120,9 @@ class BluetoothRSSI(object):
             self.connected = False
             return None
 
+
 if __name__ == '__main__':
-    a = BluetoothMonitor("18:4E:16:94:38:AF")
+    a = BluetoothMonitor("18:4E:16:94:38:AF", debug=True)
     print(f"old = {a.old_methodology()}")
     print(f"COVID = {a.covid_methodology()}")
     print(f"standard = {a.standard_methodology()}")
