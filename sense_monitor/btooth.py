@@ -73,6 +73,7 @@ class BluetoothMonitor:
 class BluetoothRSSI(object):
     """Object class for getting the RSSI value of a Bluetooth address.
     Reference: https://github.com/dagar/bluetooth-proximity
+    Also: https://www.cwnp.com/rssi-changing-definition/
     """
 
     def __init__(self, addr):
@@ -102,6 +103,11 @@ class BluetoothRSSI(object):
         """Gets the current RSSI value.
         @return: The RSSI value (float) or None if the device connection fails
                  (i.e. the device is nowhere nearby).
+
+        A positive number is "better than ideal range"
+        0 is "in the ideal range"
+        A negative number is "worse than ideal range"
+        https://www.cwnp.com/rssi-changing-definition/
         """
         try:
             # Only do connection if not already connected
