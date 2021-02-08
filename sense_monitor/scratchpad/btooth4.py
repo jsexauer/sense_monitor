@@ -24,7 +24,7 @@ def print_devices():
         print("Device %s (%s), RSSI=%d dB" % (dev.addr, dev.addrType, dev.rssi))
         for (adtype, desc, value) in dev.getScanData():
             print("  %s = %s" % (desc, value))
-            
+
 def scan_for_phone():
     while True:
         scanner = Scanner().withDelegate(ScanDelegate())
@@ -39,7 +39,8 @@ def scan_for_phone():
                     found_services += 1
             if found_services == 2:
                 print(f"Found phone {dev.addr} at {dev.rssi}")
-         sleep(15)
+        sleep(15)
         
 if __name__=='__main__':
-    scan_for_phone()
+    print_devices()
+    #scan_for_phone()
