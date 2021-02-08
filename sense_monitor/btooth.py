@@ -17,7 +17,7 @@ class BluetoothMonitor:
         devices = scanner.scan(5.0)
 
         for d in devices:
-            print(d.addr, d.rssi)
+            #print(d.addr, d.rssi)
             if d.addr.lower() == self.addr.lower():
                 return d.rssi
         return None
@@ -56,7 +56,7 @@ class BluetoothMonitor:
         if rssis_less_nones == len(rssis):
             return None # device was out of range for all measurements
 
-        rssis_filtered = filter(lambda x: x != 0, rssis_less_nones)
+        rssis_filtered = list(filter(lambda x: x != 0, rssis_less_nones))
         if len(rssis_filtered) == 0:
             return -1 # Device is close, but can't find an exact rssi
 
