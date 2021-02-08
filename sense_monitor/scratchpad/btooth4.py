@@ -1,5 +1,6 @@
-# This one works!  It is using Bluetooth Low energy
+# This one works!  It is using Bluetooth Low energy and is looking for the COVID contact tracing service
 # Phone = 18:4e:16:94:38:af but will have randomly changing address from covid service
+# https://blog.google/documents/58/Contact_Tracing_-_Bluetooth_Specification_v1.1_RYGZbKW.pdf
 
 
 import datetime
