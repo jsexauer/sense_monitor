@@ -2,6 +2,8 @@ import datetime
 import struct
 import array
 import fcntl
+import time
+
 import bluetooth
 import bluetooth._bluetooth as bt
 from bluepy.btle import Scanner
@@ -29,8 +31,6 @@ class BluetoothMonitor:
         scanner = Scanner()
         devices = scanner.scan(2.0)
 
-        print('*' * 20)
-        print(datetime.datetime.now())
         for dev in devices:
             found_services = False
             dev_desc = "Device %s (%s), RSSI=%d dB\n" % (dev.addr, dev.addrType, dev.rssi)
@@ -51,6 +51,7 @@ class BluetoothMonitor:
         rssis = []
         for i in range(10):
             rssis.append(btrssi.get_rssi())
+            time.sleep(0.5)
 
         rssis_less_nones = filter(lambda x: x is not None, rssis)
         if rssis_less_nones == len(rssis):
