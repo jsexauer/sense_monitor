@@ -25,7 +25,7 @@ class BluetoothRSSI(object):
             "6sB17s", bt.str2ba(self.addr), bt.ACL_LINK, b"\0" * 17)
         request = array.array("H", reqstr)
         handle = fcntl.ioctl(self.hci_fd, bt.HCIGETCONNINFO, request, 1)
-        handle = struct.unpack("8xH14x", request.tostring())[0]
+        handle = struct.unpack("8xH14x", request.tobytes())[0]
         self.cmd_pkt = struct.pack('H', handle)
 
     def connect(self):
@@ -55,44 +55,41 @@ class BluetoothRSSI(object):
             self.connected = False
             return None
 
-def distance_to_device(addr, num=30):
-    """Approximate distance based off of Log Normal Shadowing Model
-    https://github.com/laksh225/bluetooth-proximity/tree/patch-1/examples/lnsm
-    https://ewenchou.github.io/blog/2016/09/21/bluetooth-proximity-detection/
-    """
-    btrssi = BluetoothRSSI(addr=addr)
+    def distance_to_device(self, addr, num=30):
+        """Approximate distance based off of Log Normal Shadowing Model
+        https://github.com/laksh225/bluetooth-proximity/tree/patch-1/examples/lnsm
+        https://ewenchou.github.io/blog/2016/09/21/bluetooth-proximity-detection/
+        """
+        n = 1.5  # Path loss exponent(n) = 1.5
+        c = 10  # Environment constant(C) = 10
+        A0 = 6  # Average RSSI value at 1 meter
+        actual_dist = 37  # Static distance between transmitter and Receiver in cm
+        sum_error = 0
+        count = 0
 
-    n = 1.5  # Path loss exponent(n) = 1.5
-    c = 10  # Environment constant(C) = 10
-    A0 = 6  # Average RSSI value at 1 meter
-    actual_dist = 37  # Static distance between transmitter and Receiver in cm
-    sum_error = 0
-    count = 0
+        for i in range(1, num):
+            rssi_bt = float(self.get_rssi())
+            if (rssi_bt != 0 and i > 10):  # reduces initial false values of RSSI using initial delay of 10sec
+                count = count + 1
+                x = float((rssi_bt - A0) / (-10 * n))  # Log Normal Shadowing Model considering d0 =1m where
+                distance = (math.pow(10, x) * 100) + c
+                error = abs(actual_dist - distance)
+                sum_error = sum_error + error
+                avg_error = sum_error / count
+                print("Average Error=  " + str(avg_error))
+                print("Error=  " + str(error))
+                print("Approximate Distance:" + str(distance))
+                print("RSSI: " + str(rssi_bt))
+                print("Count: " + str(count))
+                print(" ")
+            sleep(1)
 
-    for i in range(1, num):
-        rssi_bt = float(btrssi.get_rssi())
-        if (rssi_bt != 0 and i > 10):  # reduces initial false values of RSSI using initial delay of 10sec
-            count = count + 1
-            x = float((rssi_bt - A0) / (-10 * n))  # Log Normal Shadowing Model considering d0 =1m where
-            distance = (math.pow(10, x) * 100) + c
-            error = abs(actual_dist - distance)
-            sum_error = sum_error + error
-            avg_error = sum_error / count
-            print("Average Error=  " + str(avg_error))
-            print("Error=  " + str(error))
-            print("Approximate Distance:" + str(distance))
-            print("RSSI: " + str(rssi_bt))
-            print("Count: " + str(count))
-            print(" ")
-        sleep(1)
 
-while True:
-    addr = "18:4E:16:94:38:AF"
+addr = "18:4E:16:94:38:AF"
 
-    print(bluetooth.lookup_name(addr))
-    rssi = BluetoothRSSI(addr).get_rssi()
-    print(f"RSSI = {rssi}")
+print(bluetooth.lookup_name(addr))
+btr = BluetoothRSSI(addr)
+print(f"RSSI = {btr.get_rssi()}")
+btr.distance_to_device(addr)
 
-    distance_to_device(addr)
-
-    sleep(5)
+sleep(5)
