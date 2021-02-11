@@ -11,7 +11,7 @@ sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/bin/python3.7
 sudo setcap 'cap_net_raw,cap_net_admin+eip' /home/pi/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
 ```
 
-You will then need to create a file called secret.py:
+You will then need to create a file called secret.py in the sense_monitor directory:
 ```
 SENSE_PASSWORD = '<SENSE_PASSWORD>'
 GMAIL_PASSWORD = '<GMAIL_PASSWORD>' # insecure app password from account prefrences
@@ -27,6 +27,11 @@ tar xvzf ./gattlib-0.20150805.tar.gz
 cd gattlib-0.20150805/
 sed -ie 's/boost_python-py34/boost_python-py37/' setup.py
 pip3 install .
+```
+
+To have run on startup, add above exit 0 in \etc\rc.local:
+```
+runuser -l pi -c 'python3 /home/pi/projects/sense_monitor/run_sense_monitor.py &'
 ```
 
 # Bluetooth info
