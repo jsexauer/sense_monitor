@@ -19,6 +19,7 @@ class BluetoothMonitor:
             print(*args)
 
     def old_methodology(self):
+        # Original methodoly.  Does not seem to work well on Pi Zero.
         scanner = Scanner()
         devices = scanner.scan(5.0)
 

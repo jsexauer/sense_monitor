@@ -4,12 +4,11 @@ from traceback import format_exc
 
 import pytz
 
-
-from bluepy.btle import Scanner, DefaultDelegate
 from sense_monitor.sense_api import SenseApi
 from sense_monitor.shared_data import PolledData, SHARED_DATA
 from sense_monitor.emaillib import send_email
 from sense_monitor.secret import PHONE_EMAIL_ADDR
+from sense_monitor.btooth import BluetoothMonitor
 
 EPT = pytz.timezone('US/Eastern')
 
@@ -24,32 +23,28 @@ def poll_sense_data():
     heater_ts = datetime.datetime.strptime(heater['device']['last_state_time'], '%Y-%m-%dT%H:%M:%S.000Z')
 
     # Pull bluetooth data
-    scanner = Scanner()
-    devices = scanner.scan(5.0)
+    bt = BluetoothMonitor("18:4E:16:94:38:AF")
+    bt_covid = bt.covid_methodology()
+    bt_std = bt.standard_methodology()
 
-    phone_present = False
-    phone_rssi = 0
-    for d in devices:
-        print(d.addr, d.rssi)
-        if d.addr == '18:4e:16:94:38:af':
-            phone_present = True
-            phone_rssi = d.rssi
-    
 
-    ppt = SHARED_DATA.history[-1].phone_present_time
-    if phone_present != SHARED_DATA.history[-1].phone_present:
-        ppt = datetime.datetime.now()
+
 
 
     # Update shared data
+    ppt = SHARED_DATA.history[-1].phone_present_time
     data = PolledData(
         timestamp=datetime.datetime.now(),
         heater_state=heater['device']['last_state'],
         heater_state_time=pytz.utc.localize(heater_ts).astimezone(EPT),
-        phone_present=phone_present,
+        phone_rssi_std=bt_std,
+        phone_rssi_covid=bt_covid,
         phone_present_time=ppt,
-        phone_rssi=phone_rssi
     )
+    # Update phone present time if needed
+    if data.phone_present != SHARED_DATA.history[-1].phone_present:
+        data.phone_present_time = datetime.datetime.now()
+
 
     SHARED_DATA.history.append(data)
 
