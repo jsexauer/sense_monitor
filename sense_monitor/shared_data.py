@@ -43,7 +43,7 @@ class PolledData:
         return f"""
             <p>Heater: {x.heater_state}</p>
             <p>Heater changed: {td_format(EPT.localize(datetime.datetime.now()) - x.heater_state_time)} ago at {x.heater_state_time: %H:%M}</p>
-            <p>Phone present: {x.phone_present} at {x.phone_rssi_covid} dB BLE and {x.phone_rssi_std} dB BL</p>
+            <p>Phone present: {x.phone_present} at {x.phone_rssi_covid} dB BLE and {x.phone_rssi_std} dB BT</p>
             <p>Phone changed: {td_format(datetime.datetime.now() - x.phone_present_time)} ago at {x.phone_present_time: %H:%M}</p>
             <p>Recorded at: {td_format(datetime.datetime.now() - x.timestamp)} ago at {x.timestamp:: %H:%M}</p>
             """

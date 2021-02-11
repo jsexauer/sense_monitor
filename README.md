@@ -3,25 +3,30 @@ Sense monitor on raspberry pi
 
 # Install
 ```
+sudo apt-get install libbluetooth-dev python-dev libglib2.0-dev libboost-python-dev libboost-thread-dev
 pip3 install -r requirements.txt
+# Give Bluetooth access to pybleno --> Python3.7 
+sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/bin/python3.7
+# Give Bluetooth access to bluepy --> bluepy-helper 
+sudo setcap 'cap_net_raw,cap_net_admin+eip' /home/pi/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
+```
+
+You will then need to create a file called secret.py:
+```
+SENSE_PASSWORD = '<SENSE_PASSWORD>'
+GMAIL_PASSWORD = '<GMAIL_PASSWORD>' # insecure app password from account prefrences
+PHONE_EMAIL_ADDR = "<"##########@tmomail.net">"
 ```
 
 Below only needed when playing with bluetooth low energy (BLE) in some of the scratchpad files.  It is not needed
 to run the core application.
 ```
 # From https://github.com/pybluez/pybluez/wiki/Installation-on-Raspberry-Pi-3
-sudo apt-get install libbluetooth-dev python-dev libglib2.0-dev libboost-python-dev libboost-thread-dev
 pip3 download gattlib
 tar xvzf ./gattlib-0.20150805.tar.gz
 cd gattlib-0.20150805/
 sed -ie 's/boost_python-py34/boost_python-py37/' setup.py
 pip3 install .
-
-# Give Bluetooth access to pybleno --> Python3.7 
-sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/bin/python3.7
-# Give Bluetooth access to bluepy --> bluepy-helper 
-sudo setcap 'cap_net_raw,cap_net_admin+eip' /home/pi/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
-
 ```
 
 # Bluetooth info
