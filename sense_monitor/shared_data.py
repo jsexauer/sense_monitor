@@ -69,9 +69,9 @@ class _SharedData:
             timestamp=datetime.datetime.now(),
             heater_state='???',
             heater_state_time=pytz.utc.localize(datetime.datetime(2000,1,1)),
-            phone_present=False,
             phone_present_time=datetime.datetime(2000,1,1),
-            phone_rssi=0,
+            phone_rssi_covid=None,
+            phone_rssi_std=None
         ))
 
 SHARED_DATA = _SharedData()

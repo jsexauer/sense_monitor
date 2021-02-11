@@ -2,8 +2,12 @@
 Sense monitor on raspberry pi
 
 # Install
+```
+pip3 install -r requirements.txt
+```
 
-Below only needed when playing with bluetooth low energy (BLE)
+Below only needed when playing with bluetooth low energy (BLE) in some of the scratchpad files.  It is not needed
+to run the core application.
 ```
 # From https://github.com/pybluez/pybluez/wiki/Installation-on-Raspberry-Pi-3
 sudo apt-get install libbluetooth-dev python-dev libglib2.0-dev libboost-python-dev libboost-thread-dev
@@ -32,5 +36,7 @@ scan on
 info 18:4E:16:94:38:AF
 pair 18:4E:16:94:38:AF
 connect 18:4E:16:94:38:AF
+disconnect 18:4E:16:94:38:AF
+exit
 ```
 

@@ -1,6 +1,7 @@
 import datetime
 import time
 from traceback import format_exc
+from socket import gethostname
 
 import pytz
 
@@ -60,7 +61,7 @@ def poll_sense_data():
         send_email(
             send_to=PHONE_EMAIL_ADDR,
             subject="Heater left on",
-            body="http://rpi:5005"
+            body=f"http://{gethostname()}:5005"
         )
         SHARED_DATA.last_notify = datetime.datetime.now()
 
