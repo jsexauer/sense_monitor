@@ -9,6 +9,7 @@ API_URL = 'https://api.sense.com/apiservice/api/v1/'
 
 
 class SenseApi(object):
+    """Based on: sense_energy package: https://github.com/scottbonline/sense"""
     def __init__(self):
         self.s = requests.Session()
 
