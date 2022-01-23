@@ -6,7 +6,7 @@ import time
 
 import bluetooth
 import bluetooth._bluetooth as bt
-from bluepy.btle import Scanner
+from bluepy.btle import Scanner, BTLEManagementError
 
 
 class BluetoothMonitor:
