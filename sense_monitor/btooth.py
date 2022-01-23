@@ -34,7 +34,17 @@ class BluetoothMonitor:
         # See btooth4 in scratchpad
 
         scanner = Scanner()
-        devices = scanner.scan(2.0)
+        scan_successful = False
+        for n in range(3):
+            try:
+                devices = scanner.scan(2.0)
+                scan_successful = True
+            except BTLEManagementError:
+                # May fail to acquire scan if someone else is trying to use the BT scanner at the same time
+                # Wait a moment and try again
+                time.sleep(2)
+        if not scan_successful:
+            raise Exception(f"Unable to scan after 3 attempts")
 
         for dev in devices:
             found_covid = False
